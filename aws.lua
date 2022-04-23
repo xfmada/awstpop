@@ -2,6 +2,8 @@ local DiscordLib =
     loadstring(game:HttpGet "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/discord")()
 
 getgenv().buyEgg = false;
+getgenv().autoClicker = false;
+getgenv().autoMagnet = false;
 
 local win = DiscordLib:Window("descurd :SocialCreditUp:")
 
@@ -16,6 +18,31 @@ tgls:Toggle(
         getgenv().buyEgg = bool
         if bool then
             buyEgg();
+        end  
+    end
+)
+tgls:Toggle(
+    "Auto-Clicker",
+    false,
+    function(bool)
+        getgenv().autoClicker = bool
+        if bool then
+            autoClicker();
+        end  
+    end
+)
+local Folder = game.Workspace.Drops
+tgls:Toggle(
+    "Auto-Collect",
+    false,
+    function(bool)
+        getgenv().autoMagnet = bool
+        if bool then
+            autoMagnet();
+            wait(5)
+            for i,v in pairs(Folder:GetChildren()) do
+                v:Destroy()
+            end
         end  
     end
 )
@@ -56,5 +83,24 @@ win:Server("Main", "http://www.roblox.com/asset/?id=6031075938")
                 game:GetService("ReplicatedStorage").Knit.Services.CapsuleService.RF.OpenThree:InvokeServer("Hero")
                 wait(0.5)
             end    
+        end)
+    end
+    
+    function autoMagnet()
+        spawn(function()
+            while getgenv().autoMagnet == true do
+                game:GetService("ReplicatedStorage").Knit.Services.DropService.RE.CollectDrop:FireServer("Yen")
+                game:GetService("ReplicatedStorage").Knit.Services.DropService.RE.CollectDrop:FireServer("Gems")
+                wait(0.1)
+            end
+        end)
+    end
+    
+    function autoClicker()
+        spawn(function()
+            while getgenv().autoClicker == true do
+                game:GetService("ReplicatedStorage").Knit.Services.EnemyService.RF.FireDamageClicker:InvokeServer()
+                wait(0.1)
+            end
         end)
     end
